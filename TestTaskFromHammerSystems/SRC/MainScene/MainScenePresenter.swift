@@ -8,8 +8,17 @@
 
 final class MainScenePresenter: MainScenePresentationLogic {
     weak var viewController: MainSceneDisplayLogic?
-
+    
+    var presenterString  = "data presenter" {
+        didSet {
+            print("data coming from interactor to presenter \( presenterString)")
+        }
+    }
+    
     func presentInitForm(_ response: MainScene.InitForm.Response) {
-        viewController?.displayInitForm(MainScene.InitForm.ViewModel())
+        presenterString = response.stringResponse
+        print("получаем информацию из интерактора в презентер(ПРЕЗЕНТОР)")
+        viewController?.displayInitForm(MainScene.InitForm.ViewModel(stringViewModel: presenterString))
+        print("передаем данные из презентера во вью контроллер для отображения(ПРЕЗЕНТОР)")
     }
 }

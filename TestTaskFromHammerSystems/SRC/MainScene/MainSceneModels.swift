@@ -9,13 +9,25 @@
 enum MainScene {
     enum InitForm {
         struct Request {
-            var stringRequest = ""
+            var stringRequest = "" {
+                didSet {
+                    print("data coming to request")
+                }
+            }
         }
         struct Response {
-            var stringResponse = ""
+            var stringResponse = "" {
+                didSet {
+                    print("data coming to response")
+                }
+            }
         }
         struct ViewModel {
-            var stringViewModel = ""
+            var stringViewModel = "" {
+                didSet {
+                    print("data coming to viewmodel")
+                }
+            }
         }
     }
 }

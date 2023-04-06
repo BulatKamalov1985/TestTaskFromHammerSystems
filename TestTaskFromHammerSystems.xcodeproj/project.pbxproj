@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		394FEA0D29DE6ABC000B14E7 /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394FEA0C29DE6ABC000B14E7 /* MenuCollectionViewCell.swift */; };
+		394FEA0F29DEBF85000B14E7 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394FEA0E29DEBF85000B14E7 /* NetworkManager.swift */; };
 		39F1629D29DBDA1C00BE40B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F1629C29DBDA1C00BE40B0 /* AppDelegate.swift */; };
 		39F1629F29DBDA1C00BE40B0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F1629E29DBDA1C00BE40B0 /* SceneDelegate.swift */; };
 		39F162A129DBDA1C00BE40B0 /* MainTabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F162A029DBDA1C00BE40B0 /* MainTabbarController.swift */; };
@@ -27,9 +29,15 @@
 		39F162D429DBF62A00BE40B0 /* ContactsSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F162D329DBF62A00BE40B0 /* ContactsSceneViewController.swift */; };
 		39F162D629DBF65500BE40B0 /* CartSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F162D529DBF65500BE40B0 /* CartSceneViewController.swift */; };
 		39F162D829DBF67D00BE40B0 /* ProfileSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F162D729DBF67D00BE40B0 /* ProfileSceneViewController.swift */; };
+		39F162DA29DD5E6600BE40B0 /* BankImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F162D929DD5E6600BE40B0 /* BankImages.swift */; };
+		39F162DC29DD5F7C00BE40B0 /* model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F162DB29DD5F7C00BE40B0 /* model.swift */; };
+		39F162DE29DD60C300BE40B0 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F162DD29DD60C300BE40B0 /* TableViewCell.swift */; };
+		39F162E029DD629E00BE40B0 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F162DF29DD629E00BE40B0 /* CollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		394FEA0C29DE6ABC000B14E7 /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
+		394FEA0E29DEBF85000B14E7 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		39F1629929DBDA1C00BE40B0 /* TestTaskFromHammerSystems.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestTaskFromHammerSystems.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		39F1629C29DBDA1C00BE40B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		39F1629E29DBDA1C00BE40B0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -52,6 +60,10 @@
 		39F162D329DBF62A00BE40B0 /* ContactsSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsSceneViewController.swift; sourceTree = "<group>"; };
 		39F162D529DBF65500BE40B0 /* CartSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartSceneViewController.swift; sourceTree = "<group>"; };
 		39F162D729DBF67D00BE40B0 /* ProfileSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSceneViewController.swift; sourceTree = "<group>"; };
+		39F162D929DD5E6600BE40B0 /* BankImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankImages.swift; sourceTree = "<group>"; };
+		39F162DB29DD5F7C00BE40B0 /* model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = model.swift; sourceTree = "<group>"; };
+		39F162DD29DD60C300BE40B0 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		39F162DF29DD629E00BE40B0 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +115,7 @@
 				39F162B529DBDA5100BE40B0 /* MainSceneRouter.swift */,
 				39F162B629DBDA5100BE40B0 /* MainSceneModels.swift */,
 				39F162B929DBDA5100BE40B0 /* MainSceneAssembly.swift */,
+				39F162E129DD640400BE40B0 /* new huina */,
 			);
 			path = MainScene;
 			sourceTree = "<group>";
@@ -146,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				39F162CB29DBDBB600BE40B0 /* NetworkServiceProtocol.swift */,
+				394FEA0E29DEBF85000B14E7 /* NetworkManager.swift */,
 			);
 			path = NetworkServices;
 			sourceTree = "<group>";
@@ -187,6 +201,18 @@
 				39F162D529DBF65500BE40B0 /* CartSceneViewController.swift */,
 			);
 			path = BasketScene;
+			sourceTree = "<group>";
+		};
+		39F162E129DD640400BE40B0 /* new huina */ = {
+			isa = PBXGroup;
+			children = (
+				39F162D929DD5E6600BE40B0 /* BankImages.swift */,
+				39F162DB29DD5F7C00BE40B0 /* model.swift */,
+				39F162DD29DD60C300BE40B0 /* TableViewCell.swift */,
+				39F162DF29DD629E00BE40B0 /* CollectionViewCell.swift */,
+				394FEA0C29DE6ABC000B14E7 /* MenuCollectionViewCell.swift */,
+			);
+			path = "new huina";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,16 +292,22 @@
 				39F1629D29DBDA1C00BE40B0 /* AppDelegate.swift in Sources */,
 				39F162C129DBDA5100BE40B0 /* MainSceneAssembly.swift in Sources */,
 				39F162D629DBF65500BE40B0 /* CartSceneViewController.swift in Sources */,
+				394FEA0D29DE6ABC000B14E7 /* MenuCollectionViewCell.swift in Sources */,
 				39F1629F29DBDA1C00BE40B0 /* SceneDelegate.swift in Sources */,
 				39F162BC29DBDA5100BE40B0 /* MainSceneWorker.swift in Sources */,
 				39F162D429DBF62A00BE40B0 /* ContactsSceneViewController.swift in Sources */,
+				39F162E029DD629E00BE40B0 /* CollectionViewCell.swift in Sources */,
+				394FEA0F29DEBF85000B14E7 /* NetworkManager.swift in Sources */,
 				39F162A729DBDA1C00BE40B0 /* TestTaskFromHammerSystems.xcdatamodeld in Sources */,
 				39F162C629DBDB3400BE40B0 /* MainSceneCell.swift in Sources */,
+				39F162DE29DD60C300BE40B0 /* TableViewCell.swift in Sources */,
 				39F162CC29DBDBB600BE40B0 /* NetworkServiceProtocol.swift in Sources */,
 				39F162BB29DBDA5100BE40B0 /* MainScenePresenter.swift in Sources */,
 				39F162D829DBF67D00BE40B0 /* ProfileSceneViewController.swift in Sources */,
+				39F162DC29DD5F7C00BE40B0 /* model.swift in Sources */,
 				39F162CE29DBDC8600BE40B0 /* MainSceneStorageManager.swift in Sources */,
 				39F162BE29DBDA5100BE40B0 /* MainSceneModels.swift in Sources */,
+				39F162DA29DD5E6600BE40B0 /* BankImages.swift in Sources */,
 				39F162C029DBDA5100BE40B0 /* MainSceneProtocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

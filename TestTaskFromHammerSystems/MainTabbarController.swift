@@ -8,15 +8,17 @@
 import UIKit
 
 class MainTabBarController: UITabBarController {
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        
         // Создаем контроллеры вкладок
         let menuVC = MainSceneAssembly.build()
         let contactsVC = ContactsSceneViewController()
         let profileVC = ProfileSceneViewController()
         let cartVC = CartSceneViewController()
+        
         
         // Добавляем контроллеры в массив viewControllers таб-бара
         viewControllers = [
@@ -25,6 +27,8 @@ class MainTabBarController: UITabBarController {
             generateVC(viewController: profileVC, title: "Профиль", image: UIImage(systemName: "person.fill")),
             generateVC(viewController: cartVC, title: "Корзина", image: UIImage(systemName: "cart")),
         ]
+        
+        tabBar.backgroundColor = .white
     }
     
     private func generateVC(viewController: UIViewController, title: String, image: UIImage?) -> UIViewController {
@@ -32,5 +36,7 @@ class MainTabBarController: UITabBarController {
         viewController.tabBarItem.image = image
         return viewController
     }
+    
+    
     
 }
