@@ -21,9 +21,12 @@ class TextButtonCell: UICollectionViewCell {
         contentView.addSubview(button)
         
         // Настраиваем внешний вид кнопки
-        button.backgroundColor = .systemGray
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 10
+        button.backgroundColor = .white
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .light)
+        button.layer.borderColor = UIColor(red: 0.992, green: 0.227, blue: 0.412, alpha: 1).cgColor
+        button.layer.borderWidth = 0.2
+        button.setTitleColor(UIColor(red: 0.992, green: 0.227, blue: 0.412, alpha: 1), for: .normal)
+        button.layer.cornerRadius = 15
         button.clipsToBounds = true
         
         // Задаем констрейнты для кнопки
