@@ -10,12 +10,16 @@
 import UIKit
 
 final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
+
+    // Массив названий пицц
+    let pizzaNames: TitleTV
     
+    var prices: [String] = []
+
+    // Массив данных для таблицы
+    var tableData: [String] = []
     
-    
-    var dogImagesTV: [TableViewCellModel] = []
-    var dogImagesCV: [TableViewCellModel] = []
-    let buttonTitles = ["Пицца", "Комбо", "Десерты", "Напитки", "Роллы"]
+    let fetchImagesCV = fetchDataCV()
     
    
     var dogImages: DogImageResponse {
@@ -48,7 +52,6 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
         collectionView.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(PhotoCellCV.self, forCellWithReuseIdentifier: "PhotoCellCV")
         return collectionView
     }()
@@ -60,7 +63,6 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
         layout.itemSize = CGSize(width: 88, height: 32)
         let collectionView2 = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView2.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
-        collectionView2.translatesAutoresizingMaskIntoConstraints = false
         collectionView2.register(TextButtonCell.self, forCellWithReuseIdentifier: "TextButtonCell")
         return collectionView2
     }()
@@ -69,7 +71,6 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .white
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(TableViewCell.self, forCellReuseIdentifier: "\(TableViewCell.self)")
         return tableView
     }()
@@ -82,6 +83,7 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
         self.interactor = interactor
         self.router = router
         self.dogImages = DogImageResponse(message: [], status: "")
+        self.pizzaNames = TitleTV.init()
             super.init(nibName: nil, bundle: nil)
     }
     
@@ -92,27 +94,24 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
     
         override func viewDidLoad() {
         super.viewDidLoad()
-            NetworkManager.shared.fetchBreedDog(from: "https://dog.ceo/api/breed/hound/images")
-            { resultDogBreed in
-                guard let dogsBreed = resultDogBreed else { return }
-                print(dogsBreed.message.count)
-                self.dogImages = dogsBreed
-            }
+            NetworkManager.shared.fetchBreedDog(from: "https://dog.ceo/api/breed/hound/images") { [weak self] resultDogBreed in
+                   guard let self = self, let dogsBreed = resultDogBreed else { return }
+                   print(dogsBreed.message.count)
+                   self.dogImages = dogsBreed
+               }
+            
         setupCollectionView()
         setupCollectionView2()
         initForm()
-        dogImagesTV = fetchDataTV()
-        dogImagesCV = fetchDataCV()
         setupTableView()
         view.backgroundColor = .white
         print("start")
            
-        
     }
 
     func setupCollectionView() {
-        // Add collection view to view hierarchy
         view.addSubview(collectionView)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -124,8 +123,8 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
     }
     
     func setupCollectionView2() {
-        // Add collection view to view hierarchy
         view.addSubview(collectionView2)
+        collectionView2.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView2.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
             collectionView2.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -138,8 +137,8 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
     }
     
     func setupTableView() {
-        // Add table view to view hierarchy
         view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: collectionView2.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -173,6 +172,18 @@ extension MainSceneViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "\(TableViewCell.self)") as! TableViewCell
         cell.uploadImageFromUrl(messages[indexPath.row])
+        for price in stride(from: 300, through: 1000, by: 100) {
+            prices.append("  от \(price) руб  ")
+        }
+        cell.priceLabel.text = prices[indexPath.row]
+        let numberOfPizzas = tableView.numberOfRows(inSection: 0) // Получаем количество строк в таблице
+        for _ in 0..<numberOfPizzas {
+            let randomIndex = Int.random(in: 0..<pizzaNames.pizzas.count) // Генерируем случайный индекс в диапазоне от 0 до размера массива пицц
+            let pizzaName = pizzaNames.pizzas[randomIndex] // Получаем случайную пиццу из массива пицц
+            tableData.append(pizzaName) // Добавляем пиццу в массив данных для таблицы
+            cell.descriptionLabel.text = tableData[indexPath.row]
+            cell.dogTitleLabel.text = tableData[indexPath.row]
+        }
         return cell
     }
     
@@ -185,7 +196,7 @@ extension MainSceneViewController: UITableViewDelegate, UITableViewDataSource {
 extension MainSceneViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionView == collectionView2 ? buttonTitles.count : dogImagesCV.count
+        return collectionView == collectionView2 ? buttonTitles.count : fetchImagesCV.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -197,7 +208,7 @@ extension MainSceneViewController: UICollectionViewDelegate, UICollectionViewDat
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCellCV", for: indexPath) as! PhotoCellCV
-            cell.imageView.image = dogImagesCV[indexPath.item].image
+            cell.imageView.image = fetchImagesCV[indexPath.item].image
             return cell
         }
     }
@@ -238,60 +249,5 @@ extension MainSceneViewController: UICollectionViewDelegate, UICollectionViewDat
     }
 
 }
-
-
-
-
-extension MainSceneViewController {
-    func fetchDataTV() -> [TableViewCellModel] {
-        let image1 = TableViewCellModel(image: Images.dog1 , title: "DOG 1")
-        let image2 = TableViewCellModel(image: Images.dog2 , title: "DOG 2")
-        let image3 = TableViewCellModel(image: Images.dog3 , title: "DOG 3")
-        let image4 = TableViewCellModel(image: Images.dog4 , title: "DOG 4")
-        let image5 = TableViewCellModel(image: Images.dog5 , title: "DOG 5")
-        let image6 = TableViewCellModel(image: Images.dog6 , title: "DOG 6")
-        let image7 = TableViewCellModel(image: Images.dog7 , title: "DOG 7")
-        let image8 = TableViewCellModel(image: Images.dog8 , title: "DOG 8")
-        let image9 = TableViewCellModel(image: Images.dog9 , title: "DOG 11")
-        let image10 = TableViewCellModel(image: Images.dog10, title: "DOG 13")
-        let image11 = TableViewCellModel(image: Images.dog11 , title: "DOG 8")
-        let image12 = TableViewCellModel(image: Images.dog12 , title: "DOG 11")
-        let image13 = TableViewCellModel(image: Images.dog13, title: "DOG 13")
-        
-        return [image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13]
-    }
-}
-
-
-extension MainSceneViewController {
-    func fetchDataCV() -> [TableViewCellModel] {
-        let image1 = TableViewCellModel(image: Images.dog1 , title: "DOG 1")
-        let image2 = TableViewCellModel(image: Images.dog2 , title: "DOG 2")
-        let image3 = TableViewCellModel(image: Images.dog3 , title: "DOG 3")
-        let image4 = TableViewCellModel(image: Images.dog4 , title: "DOG 4")
-        let image5 = TableViewCellModel(image: Images.dog5 , title: "DOG 5")
-        let image6 = TableViewCellModel(image: Images.dog6 , title: "DOG 6")
-        let image7 = TableViewCellModel(image: Images.dog7 , title: "DOG 7")
-        let image8 = TableViewCellModel(image: Images.dog8 , title: "DOG 8")
-        let image9 = TableViewCellModel(image: Images.dog9 , title: "DOG 11")
-        let image10 = TableViewCellModel(image: Images.dog10, title: "DOG 13")
-        let image11 = TableViewCellModel(image: Images.dog11 , title: "DOG 8")
-        let image12 = TableViewCellModel(image: Images.dog12 , title: "DOG 11")
-        let image13 = TableViewCellModel(image: Images.dog13, title: "DOG 13")
-        
-        return [image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13]
-    }
-}
-
-extension UIView {
-    func pin(to superView: UIView) {
-        translatesAutoresizingMaskIntoConstraints = false
-        topAnchor.constraint(equalTo: superView.topAnchor).isActive = true
-        leadingAnchor.constraint(equalTo: superView.leadingAnchor).isActive = true
-        trailingAnchor.constraint(equalTo: superView.trailingAnchor).isActive = true
-        bottomAnchor.constraint(equalTo: superView.bottomAnchor).isActive = true
-    }
-}
-
 
 
