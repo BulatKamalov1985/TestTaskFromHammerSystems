@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TableViewCell: UITableViewCell {
+class MainSceneTableViewCell: UITableViewCell {
     
     let dogImageView: UIImageView = {
         let imageView = UIImageView()
@@ -18,7 +18,7 @@ class TableViewCell: UITableViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-
+    
     let dogTitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -27,7 +27,7 @@ class TableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
     let descriptionLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -62,7 +62,7 @@ class TableViewCell: UITableViewCell {
         setDescriptionLabelConstraints()
         setLabelConstraints()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -73,8 +73,8 @@ class TableViewCell: UITableViewCell {
             priceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15)
         ])
     }
-
-
+    
+    
     func setImageConstraints() {
         NSLayoutConstraint.activate([
             dogImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -83,7 +83,7 @@ class TableViewCell: UITableViewCell {
             dogImageView.widthAnchor.constraint(equalTo: dogImageView.heightAnchor, multiplier: 16/9)
         ])
     }
-
+    
     func setTitleLabelConstraints() {
         NSLayoutConstraint.activate([
             dogTitleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 5),
@@ -97,10 +97,9 @@ class TableViewCell: UITableViewCell {
             descriptionLabel.topAnchor.constraint(equalTo: dogTitleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: dogImageView.trailingAnchor, constant: 20),
             descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
-//            descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)
         ])
     }
-
+    
     func uploadImageFromUrl(_ stringURL: String) {
         guard let url = URL(string: stringURL) else {
             print("Something went wrong: Invalid URL")

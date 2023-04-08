@@ -10,19 +10,18 @@
 import UIKit
 
 final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
-
-    // Массив названий пицц
+    
+    // Array of pizza names
     let pizzaNames: TitleTV
     
     var prices: [String] = []
-
-    // Массив данных для таблицы
+    
+    // Data array for the table
     var tableData: [String] = []
     
     let fetchImagesCV = fetchDataCV()
     
-   
-    var dogImages: DogImageResponse {
+    var dogImages: DogImages {
         didSet {
             tableView.reloadData()
         }
@@ -31,7 +30,6 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
     var messages: [String] {
         dogImages.message.compactMap{ $0 }
     }
-   
     
     var VCstring  = "DATA VIEWCONTROLLER" {
         didSet {
@@ -45,14 +43,14 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
     // Collection View
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 5
+        layout.minimumLineSpacing = 16
         layout.minimumInteritemSpacing = 5
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 300, height: 112)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
         collectionView.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
-        collectionView.register(PhotoCellCV.self, forCellWithReuseIdentifier: "PhotoCellCV")
+        collectionView.register(MainSceneCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCellCV")
         return collectionView
     }()
     
@@ -63,15 +61,15 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
         layout.itemSize = CGSize(width: 88, height: 32)
         let collectionView2 = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView2.backgroundColor = UIColor(red: 0.898, green: 0.898, blue: 0.898, alpha: 1)
-        collectionView2.register(TextButtonCell.self, forCellWithReuseIdentifier: "TextButtonCell")
+        collectionView2.register(MainSceneMenuCollectionViewCell.self, forCellWithReuseIdentifier: "TextButtonCell")
         return collectionView2
     }()
-
+    
     // Table View
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .white
-        tableView.register(TableViewCell.self, forCellReuseIdentifier: "\(TableViewCell.self)")
+        tableView.register(MainSceneTableViewCell.self, forCellReuseIdentifier: "\(MainSceneTableViewCell.self)")
         return tableView
     }()
     
@@ -82,9 +80,9 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
     ) {
         self.interactor = interactor
         self.router = router
-        self.dogImages = DogImageResponse(message: [], status: "")
+        self.dogImages = DogImages(message: [], status: "")
         self.pizzaNames = TitleTV.init()
-            super.init(nibName: nil, bundle: nil)
+        super.init(nibName: nil, bundle: nil)
     }
     
     @available(*, unavailable)
@@ -92,23 +90,25 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
         fatalError("init(coder:) has not been implemented")
     }
     
-        override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
-            NetworkManager.shared.fetchBreedDog(from: "https://dog.ceo/api/breed/hound/images") { [weak self] resultDogBreed in
-                   guard let self = self, let dogsBreed = resultDogBreed else { return }
-                   print(dogsBreed.message.count)
-                   self.dogImages = dogsBreed
-               }
-            
         setupCollectionView()
         setupCollectionView2()
         initForm()
         setupTableView()
+        uploadFetchBreedDog()
         view.backgroundColor = .white
         print("start")
-           
+        
     }
-
+    
+    func uploadFetchBreedDog() {
+        NetworkManager.shared.fetchBreedDog(from: "https://dog.ceo/api/breed/hound/images") { [weak self] resultDogBreed in
+            guard let dogsBreed = resultDogBreed else { return }
+            self?.dogImages = dogsBreed
+        }
+    }
+    
     func setupCollectionView() {
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -150,17 +150,17 @@ final class MainSceneViewController: UIViewController, MainSceneDisplayLogic {
     }
     
     // MARK: - MainSceneDisplayLogic
-    // Метод, который выводит на экран данные во view контроллера
+    // Метод, который выводит на экран данные во view контроллер
     func displayInitForm(_ viewModel: MainScene.InitForm.ViewModel) {
         VCstring = viewModel.stringViewModel
-        print("получаем инфу из презентера во вьюконтроллер(ВЬЮКОТНРОЛЛЕР)")
+        print("get information from the presenter to the view controller (ViewCOTNROLLER)")
     }
     
     // MARK: - Private
     // Метод для инициализации формы, который вызывает запрос данных у интерактора
     private func initForm() {
         interactor.requestInitForm(MainScene.InitForm.Request(stringRequest: VCstring))
-        print("отправляем данные из вьюконтроллера в Interactor(ВЬЮКОНТРОЛЛЕР)")
+        print("send data from viewcontroller to Interactor(VIEWCONTROLLER)")
     }
 }
 
@@ -170,17 +170,19 @@ extension MainSceneViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "\(TableViewCell.self)") as! TableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "\(MainSceneTableViewCell.self)") as! MainSceneTableViewCell
         cell.uploadImageFromUrl(messages[indexPath.row])
+        
         for price in stride(from: 300, through: 1000, by: 100) {
             prices.append("  от \(price) руб  ")
         }
+        
         cell.priceLabel.text = prices[indexPath.row]
-        let numberOfPizzas = tableView.numberOfRows(inSection: 0) // Получаем количество строк в таблице
+        let numberOfPizzas = tableView.numberOfRows(inSection: 0) // Get the number of rows in the table
         for _ in 0..<numberOfPizzas {
-            let randomIndex = Int.random(in: 0..<pizzaNames.pizzas.count) // Генерируем случайный индекс в диапазоне от 0 до размера массива пицц
-            let pizzaName = pizzaNames.pizzas[randomIndex] // Получаем случайную пиццу из массива пицц
-            tableData.append(pizzaName) // Добавляем пиццу в массив данных для таблицы
+            let randomIndex = Int.random(in: 0..<pizzaNames.pizzas.count) // Generate a random index within the range of 0 to the size of the pizza array
+            let pizzaName = pizzaNames.pizzas[randomIndex] // Get a random pizza from the pizza array
+            tableData.append(pizzaName) // Add the pizza to the data array for the table
             cell.descriptionLabel.text = tableData[indexPath.row]
             cell.dogTitleLabel.text = tableData[indexPath.row]
         }
@@ -201,53 +203,50 @@ extension MainSceneViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == collectionView2 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TextButtonCell", for: indexPath) as! TextButtonCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TextButtonCell", for: indexPath) as! MainSceneMenuCollectionViewCell
             cell.title = buttonTitles[indexPath.row]
-            cell.button.tag = indexPath.row // устанавливаем тег кнопки
-            cell.button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside) // добавляем обработчик нажатия на кнопку
+            cell.button.tag = indexPath.row // set button tag
+            cell.button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside) // add button tap handler
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCellCV", for: indexPath) as! PhotoCellCV
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCellCV", for: indexPath) as! MainSceneCollectionViewCell
             cell.imageView.image = fetchImagesCV[indexPath.item].image
             return cell
         }
     }
-
+    
+    
     
     @objc func buttonTapped(_ sender: UIButton) {
         let buttonTag = sender.tag
         switch buttonTag {
         case 0:
-            // Действие для первой кнопки
-            let indexPath = IndexPath(row: 10, section: 0) // индекс секции и ячейки, к которой нужно пролистать таблицу
-            tableView.scrollToRow(at: indexPath, at: .top, animated: true) // прокручиваем таблицу к указанной ячейке с анимацией
-
-            print("Нажата первая кнопка")
+            // Action for the first button
+            let indexPath = IndexPath(row: 10, section: 0) // Index path of the row and section to scroll the table view to
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true) // Scroll the table view to the specified cell with animation
+            print("First button tapped")
         case 1:
-            let indexPath = IndexPath(row: 20, section: 0) // индекс секции и ячейки, к которой нужно пролистать таблицу
-            tableView.scrollToRow(at: indexPath, at: .top, animated: true) // прокручиваем таблицу к указанной ячейке с анимацией
-            // Действие для второй кнопки
-            print("Нажата вторая кнопка")
+            let indexPath = IndexPath(row: 20, section: 0) // Index path of the row and section to scroll the table view to
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true) // Scroll the table view to the specified cell with animation
+            // Action for the second button
+            print("Second button tapped")
         case 2:
-            let indexPath = IndexPath(row: 30, section: 0) // индекс секции и ячейки, к которой нужно пролистать таблицу
-            tableView.scrollToRow(at: indexPath, at: .top, animated: true) // прокручиваем таблицу к указанной ячейке с анимацией
-            // Действие для третьей кнопки
-            print("Нажата третья кнопка")
+            let indexPath = IndexPath(row: 30, section: 0) // Index path of the row and section to scroll the table view to
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true) // Scroll the table view to the specified cell with animation
+            // Action for the third button
+            print("Third button tapped")
         case 3:
-            let indexPath = IndexPath(row: 40, section: 0) // индекс секции и ячейки, к которой нужно пролистать таблицу
-            tableView.scrollToRow(at: indexPath, at: .top, animated: true) // прокручиваем таблицу к указанной ячейке с анимацией
-            // Действие для четвертой кнопки
-            print("Нажата четвертая кнопка")
+            let indexPath = IndexPath(row: 40, section: 0) // Index path of the row and section to scroll the table view to
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true) // Scroll the table view to the specified cell with animation
+            // Action for the fourth button
+            print("Fourth button tapped")
         case 4:
-            let indexPath = IndexPath(row: 50, section: 0) // индекс секции и ячейки, к которой нужно пролистать таблицу
-            tableView.scrollToRow(at: indexPath, at: .top, animated: true) // прокручиваем таблицу к указанной ячейке с анимацией
-            // Действие для пятой кнопки
-            print("Нажата пятая кнопка")
+            let indexPath = IndexPath(row: 50, section: 0) // Index path of the row and section to scroll the table view to
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true) // Scroll the table view to the specified cell with animation
+            // Action for the fifth button
+            print("Fifth button tapped")
         default:
             break
         }
     }
-
 }
-
-

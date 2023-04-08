@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TextButtonCell: UICollectionViewCell {
+class MainSceneMenuCollectionViewCell: UICollectionViewCell {
     
     let button = UIButton()
     var title: String? {
@@ -20,7 +20,6 @@ class TextButtonCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.addSubview(button)
         
-        // Настраиваем внешний вид кнопки
         button.backgroundColor = .white
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .light)
         button.layer.borderColor = UIColor(red: 0.992, green: 0.227, blue: 0.412, alpha: 1).cgColor
@@ -29,7 +28,6 @@ class TextButtonCell: UICollectionViewCell {
         button.layer.cornerRadius = 15
         button.clipsToBounds = true
         
-        // Задаем констрейнты для кнопки
         button.translatesAutoresizingMaskIntoConstraints = false
         button.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true

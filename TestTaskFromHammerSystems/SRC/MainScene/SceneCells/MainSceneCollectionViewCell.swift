@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class PhotoCellCV: UICollectionViewCell {
+class MainSceneCollectionViewCell: UICollectionViewCell {
     
     let imageView = UIImageView()
 

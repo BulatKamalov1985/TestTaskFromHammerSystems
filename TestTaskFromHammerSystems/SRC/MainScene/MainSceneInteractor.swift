@@ -9,6 +9,7 @@ import Foundation
 
 final class MainSceneInteractor: MainSceneBusinessLogic, MainSceneDataStore {
     
+    
     var inreractorString = "data interactor" {
         didSet {
             print("data coming from viecontroller to interactor \( inreractorString)")
@@ -30,7 +31,7 @@ final class MainSceneInteractor: MainSceneBusinessLogic, MainSceneDataStore {
         inreractorString = request.stringRequest
         print("получаем инфу из viewcontrollera в интерактор(ИНТЕРАКТОР)")
         DispatchQueue.main.async {
-            self.presenter.presentInitForm(MainScene.InitForm.Response(stringResponse: self.inreractorString))
+            self.presenter.presentInitForm(MainScene.InitForm.Response( stringResponse: self.inreractorString))
             print("передаем данные из интерактора в презентер(ИНТЕРАКТОР)")
         }
     }
