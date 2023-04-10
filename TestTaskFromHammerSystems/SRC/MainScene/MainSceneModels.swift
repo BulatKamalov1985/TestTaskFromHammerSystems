@@ -8,34 +8,72 @@
 import UIKit
 
 enum MainScene {
-    enum InitForm {
+    enum Data {
         
         // Mediator between view and interactor
-        struct Request {
-            var stringRequest = "" {
-                didSet {
-                    print("Data coming to request")
-                }
-            }
+        enum Request {
+            case updateDogs
+            case updateFilters
+            case updateDishes
         }
         
         // Mediator between interactor and presenter
-        struct Response {
-            var stringResponse = "" {
-                didSet {
-                    print("Data coming to response")
-                }
-            }
+        enum Response {
+            case refreshDogs(dogs: [Dog])
+            case refreshFilters(filters: [Filter])
+            case refreshDishes(dishes: [Dish])
         }
-        
-        // Mediator between presenter and view
-        struct ViewModel {
-            var stringViewModel = "" {
-                didSet {
-                    print("Data coming to viewmodel")
-                }
-            }
-        }
+    }
+    
+    enum ViewModel {
+        case dogs([DogsViewModel])
+        case filters([FilterViewModel])
+        case dishes([DishViewModel])
+    }
+}
+
+struct FilterViewModel {
+     
+    private let filter: Filter
+    
+    var name: String {
+        filter.name
+    }
+    
+    init(filter: Filter) {
+        self.filter = filter
+    }
+    
+    
+}
+
+struct DishViewModel {
+    
+    private let dish: Dish
+    
+    var name: String {
+        dish.name
+    }
+    
+    init(dish: Dish) {
+        self.dish = dish
+    }
+}
+
+struct DogsViewModel {
+    
+    var image: UIImage {
+        dog.image
+    }
+    
+    var title: String{
+        dog.title
+    }
+    
+    private let dog: Dog
+    
+    init(dog: Dog) {
+        self.dog = dog
     }
 }
 
@@ -44,8 +82,4 @@ struct DogImages: Codable {
     let status: String
 }
 
-struct TableViewCellModel {
-    var image: UIImage
-    var title: String
-}
 

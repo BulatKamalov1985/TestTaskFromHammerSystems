@@ -10,9 +10,11 @@ import UIKit
 
 enum MainSceneAssembly {
     static func build() -> UIViewController {
+        let service = DogServices()
+        let dishesService = DishesService()
         let presenter = MainScenePresenter()
         let worker = MainSceneWorker()
-        let interactor = MainSceneInteractor(presenter: presenter, worker: worker)
+        let interactor = MainSceneInteractor(presenter: presenter, worker: worker, dogService: service, dishesService: dishesService)
         let router = MainSceneRouter(dataStore: interactor)
         let viewController = MainSceneViewController(interactor: interactor, router: router)
 

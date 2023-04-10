@@ -7,18 +7,36 @@
 //
 
 final class MainScenePresenter: MainScenePresentationLogic {
+    
     weak var viewController: MainSceneDisplayLogic?
     
-    var presenterString  = "data presenter" {
-        didSet {
-            print("data coming from interactor to presenter \( presenterString)")
+    func refresh(_ response: MainScene.Data.Response) {
+        switch response {
+        case .refreshDogs(let dogs):
+            refresh(dogs)
+        case .refreshFilters(filters: let filter):
+           refreshFilters(filter)
+        case .refreshDishes(dishes: let dishes):
+         refreshDishes(dishes)
+            
         }
     }
+}
+
+private extension MainScenePresenter {
+    func refresh(_ dogs: [Dog]) {
+        let dogViewModels = dogs.map { DogsViewModel(dog: $0) }
+        viewController?.display(MainScene.ViewModel.dogs(dogViewModels))
+    }
     
-    func presentInitForm(_ response: MainScene.InitForm.Response) {
-        presenterString = response.stringResponse
-        print("получаем информацию из интерактора в презентер(ПРЕЗЕНТОР)")
-        viewController?.displayInitForm(MainScene.InitForm.ViewModel(stringViewModel: presenterString))
-        print("передаем данные из презентера во вью контроллер для отображения(ПРЕЗЕНТОР)")
+    func refreshFilters(_ filters: [Filter]) {
+        let filterViewmodels = filters.map { FilterViewModel(filter: $0) }
+        viewController?.display(MainScene.ViewModel.filters(filterViewmodels))
+    }
+    
+    func refreshDishes(_ dishes: [Dish]) {
+        let dishesViewmodels = dishes.map { DishViewModel(dish: $0) }
+        viewController?.display(MainScene.ViewModel.dishes(dishesViewmodels))
     }
 }
+

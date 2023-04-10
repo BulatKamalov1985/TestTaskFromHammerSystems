@@ -13,17 +13,17 @@ protocol MainSceneDataPassing {
 protocol MainSceneDataStore {}
 
 protocol MainSceneBusinessLogic {
-    func requestInitForm(_ request: MainScene.InitForm.Request)
+    func update(_ request: MainScene.Data.Request)
 }
 
 protocol MainSceneWorkerLogic {}
 
 protocol MainScenePresentationLogic {
-    func presentInitForm(_ response: MainScene.InitForm.Response)
+    func refresh(_ response: MainScene.Data.Response)
 }
 
 protocol MainSceneDisplayLogic: AnyObject {
-    func displayInitForm(_ viewModel: MainScene.InitForm.ViewModel)
+    func display(_ viewModel: MainScene.ViewModel )
 }
 
 protocol MainSceneRoutingLogic {}
